@@ -1,0 +1,1981 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BarberEase - Booking Cukur Tanpa Antri</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-black: #1a1a1a;
+            --gold: #d4af37;
+            --gold-dark: #b8941f;
+            --white: #ffffff;
+            --gray-light: #f5f5f5;
+            --gray-dark: #666666;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--primary-black);
+            background: var(--white);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: var(--primary-black);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+        }
+
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        .logo i {
+            margin-right: 0.5rem;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--white);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--gold);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: var(--gold);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, var(--gold), var(--gold-dark));
+            color: var(--primary-black);
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(45deg, var(--gold-dark), var(--gold));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--gold);
+            border: 2px solid var(--gold);
+        }
+
+        .btn-outline:hover {
+            background: var(--gold);
+            color: var(--primary-black);
+        }
+
+        .btn-dark {
+            background: var(--primary-black);
+            color: var(--gold);
+            border: 2px solid var(--gold);
+        }
+
+        .btn-dark:hover {
+            background: var(--gold);
+            color: var(--primary-black);
+        }
+
+        /* Pages */
+        .page {
+            display: none;
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Landing Page */
+        .hero {
+            background: linear-gradient(rgba(26, 26, 26, 0.8), rgba(26, 26, 26, 0.8)), 
+                        url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 600"><rect fill="%231a1a1a" width="1200" height="600"/><rect fill="%23d4af37" x="50" y="50" width="200" height="500" rx="10"/><rect fill="%23333" x="300" y="100" width="150" height="400" rx="75"/><rect fill="%23d4af37" x="500" y="150" width="100" height="50" rx="25"/><rect fill="%23666" x="650" y="200" width="80" height="200" rx="10"/></svg>');
+            background-size: cover;
+            background-position: center;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            color: var(--white);
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .hero-content .highlight {
+            color: var(--gold);
+        }
+
+        .hero-content p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .features {
+            padding: 5rem 0;
+            background: var(--gray-light);
+        }
+
+        .features-dark {
+            background: var(--primary-black);
+            color: var(--white);
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .feature-card {
+            background: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 3px solid transparent;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--gold);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .features-dark .feature-card {
+            background: #2a2a2a;
+            color: var(--white);
+        }
+
+        .feature-card i {
+            font-size: 3.5rem;
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 800;
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            width: 100px;
+            height: 4px;
+            background: var(--gold);
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: var(--gray-dark);
+            font-size: 1.2rem;
+        }
+
+        .features-dark .section-subtitle {
+            color: #ccc;
+        }
+
+        /* Services Page */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .service-card {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .service-image {
+            height: 200px;
+            background: linear-gradient(45deg, var(--gold), var(--gold-dark));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: var(--primary-black);
+        }
+
+        .service-content {
+            padding: 2rem;
+        }
+
+        .service-price {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        /* Barber Page */
+        .barber-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .barber-card {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .barber-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+        }
+
+        .barber-image {
+            height: 250px;
+            background: linear-gradient(45deg, #333, #555);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 5rem;
+            color: var(--gold);
+            position: relative;
+        }
+
+        .barber-rating {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--gold);
+            color: var(--primary-black);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+        }
+
+        .barber-content {
+            padding: 2rem;
+        }
+
+        .barber-name {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--primary-black);
+        }
+
+        .barber-skills {
+            color: var(--gold);
+            font-weight: 500;
+            margin-bottom: 1rem;
+        }
+
+        .barber-experience {
+            color: var(--gray-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        /* Booking Page */
+        .booking-container {
+            max-width: 800px;
+            margin: 2rem auto;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .booking-header {
+            background: var(--primary-black);
+            color: var(--white);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .booking-form {
+            padding: 2rem;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: var(--primary-black);
+        }
+
+        .form-group input, .form-group select, .form-group textarea {
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            font-family: inherit;
+        }
+
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: var(--gold);
+        }
+
+        .booking-summary {
+            background: var(--gray-light);
+            padding: 2rem;
+            border-radius: 15px;
+            margin: 2rem 0;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-total {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--gold);
+            border-top: 2px solid var(--gold);
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* Payment Page */
+        .payment-container {
+            max-width: 600px;
+            margin: 2rem auto;
+        }
+
+        .countdown {
+            background: linear-gradient(45deg, #ff4757, #ff6b81);
+            color: var(--white);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            font-size: 1.2rem;
+        }
+
+        .payment-methods {
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .payment-method {
+            padding: 2rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .payment-method:last-child {
+            border-bottom: none;
+        }
+
+        .qr-code {
+            text-align: center;
+            padding: 2rem;
+            background: var(--gray-light);
+            border-radius: 15px;
+            margin: 1rem 0;
+        }
+
+        .qr-placeholder {
+            width: 200px;
+            height: 200px;
+            background: var(--white);
+            margin: 0 auto;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 4rem;
+            color: var(--gold);
+            border: 3px solid var(--gold);
+        }
+
+        /* History Page */
+        .history-container {
+            margin: 2rem 0;
+        }
+
+        .history-table {
+            background: var(--white);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .history-table table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .history-table th {
+            background: var(--primary-black);
+            color: var(--white);
+            padding: 1.5rem;
+            text-align: left;
+            font-weight: 600;
+        }
+
+        .history-table td {
+            padding: 1.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .status-badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-paid {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-cancelled {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        /* Auth Pages */
+        .auth-container {
+            max-width: 450px;
+            margin: 3rem auto;
+            background: var(--white);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .auth-header {
+            background: var(--primary-black);
+            color: var(--white);
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .auth-tabs {
+            display: flex;
+            background: var(--gray-light);
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 1rem;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            color: var(--gray-dark);
+        }
+
+        .auth-tab.active {
+            background: var(--gold);
+            color: var(--primary-black);
+        }
+
+        .auth-form {
+            padding: 2rem;
+        }
+
+        /* Admin Dashboard */
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(45deg, var(--primary-black), #333);
+            color: var(--white);
+            padding: 2.5rem;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .stat-card h3 {
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 0.5rem;
+            font-weight: 800;
+        }
+
+        .stat-card p {
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        .admin-actions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .action-card {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .action-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .action-card i {
+            font-size: 3rem;
+            color: var(--gold);
+            margin-bottom: 1rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--primary-black);
+            color: var(--white);
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            color: var(--gold);
+            margin-bottom: 1.5rem;
+            font-weight: 700;
+        }
+
+        .footer-section a {
+            color: #ccc;
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.8rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: var(--gold);
+        }
+
+        .footer-section i {
+            margin-right: 0.5rem;
+            width: 20px;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #333;
+            color: #999;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--gold);
+            color: var(--primary-black);
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--gold-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Mobile Menu */
+        .mobile-menu-btn {
+            display: none;
+            background: none;
+            border: none;
+            color: var(--white);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: block;
+            }
+
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .auth-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .btn {
+                padding: 0.6rem 1.5rem;
+                font-size: 0.9rem;
+            }
+
+            .booking-container {
+                margin: 1rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .alert {
+            padding: 1rem;
+            border-radius: 10px;
+            margin: 1rem 0;
+            font-weight: 500;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert-danger {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .alert-warning {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        /* Calendar styles */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 1px;
+            background: #ddd;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 1rem 0;
+        }
+
+        .calendar-day {
+            background: var(--white);
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-day:hover {
+            background: var(--gold);
+            color: var(--primary-black);
+        }
+
+        .calendar-day.selected {
+            background: var(--gold);
+            color: var(--primary-black);
+            font-weight: 600;
+        }
+
+        .time-slots {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+            gap: 0.5rem;
+            margin: 1rem 0;
+        }
+
+        .time-slot {
+            padding: 0.8rem;
+            background: var(--gray-light);
+            border: 2px solid transparent;
+            border-radius: 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .time-slot:hover {
+            border-color: var(--gold);
+        }
+
+        .time-slot.selected {
+            background: var(--gold);
+            color: var(--primary-black);
+            border-color: var(--gold);
+        }
+
+        .time-slot.unavailable {
+            background: #f8d7da;
+            color: #721c24;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav class="container">
+            <a href="#" class="logo" onclick="showPage('home')">
+                <i class="fas fa-cut"></i> BarberEase
+            </a>
+            <ul class="nav-links">
+                <li><a href="#" onclick="showPage('home')">Home</a></li>
+                <li><a href="#" onclick="showPage('services')">Layanan</a></li>
+                <li><a href="#" onclick="showPage('barbers')">Barber</a></li>
+                <li><a href="#" onclick="showPage('booking')">Booking</a></li>
+                <li><a href="#" onclick="showPage('gallery')">Galeri</a></li>
+                <li><a href="#" onclick="showPage('history')">Riwayat</a></li>
+                <li><a href="#" onclick="showPage('admin')">Admin</a></li>
+            </ul>
+            <div class="auth-buttons">
+                <a href="#" class="btn btn-outline" onclick="showPage('auth')">Login</a>
+                <a href="#" class="btn btn-primary" onclick="showPage('booking')">Booking</a>
+            </div>
+            <button class="mobile-menu-btn">
+                <i class="fas fa-bars"></i>
+            </button>
+        </nav>
+    </header>
+
+    <!-- Home Page -->
+    <div id="home" class="page active">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <div class="hero-content">
+                    <h1>Booking Cukur <span class="highlight">Tanpa Antri</span></h1>
+                    <p>Pilih barber favoritmu dan waktu terbaikmu. Nikmati pengalaman cukur premium dengan pelayanan terbaik di kota</p>
+                    <a href="#" class="btn btn-primary" onclick="showPage('booking')">
+                        <i class="fas fa-calendar-check"></i> Booking Sekarang
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Fitur Unggulan -->
+        <section class="features">
+            <div class="container">
+                <h2 class="section-title">Mengapa Memilih BarberEase?</h2>
+                <p class="section-subtitle">Pengalaman cukur modern dengan teknologi booking terdepan</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-mobile-alt"></i>
+                        <h3>Booking Online Mudah</h3>
+                        <p>Sistem booking online yang mudah digunakan, kapan saja dan dimana saja</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-user-tie"></i>
+                        <h3>Pilih Barber Sesuai Gaya</h3>
+                        <p>Barber profesional dengan keahlian khusus sesuai style yang kamu inginkan</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>Tempat Nyaman & Higienis</h3>
+                        <p>Fasilitas modern dengan standar kebersihan dan kenyamanan terbaik</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-star"></i>
+                        <h3>Produk Premium</h3>
+                        <p>Menggunakan produk perawatan rambut premium dari brand terpercaya</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Galeri Barbershop -->
+        <section class="features features-dark">
+            <div class="container">
+                <h2 class="section-title" style="color: var(--white);">Galeri Barbershop</h2>
+                <p class="section-subtitle">Lihat suasana dan fasilitas barbershop kami</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div style="height: 200px; background: linear-gradient(45deg, var(--gold), var(--gold-dark)); border-radius: 15px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; color: var(--primary-black); font-size: 4rem;">
+                            <i class="fas fa-store"></i>
+                        </div>
+                        <h4>Interior Modern</h4>
+                        <p>Desain interior modern dengan konsep industrial chic</p>
+                    </div>
+                    <div class="feature-card">
+                        <div style="height: 200px; background: linear-gradient(45deg, var(--gold), var(--gold-dark)); border-radius: 15px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; color: var(--primary-black); font-size: 4rem;">
+                            <i class="fas fa-chair"></i>
+                        </div>
+                        <h4>Kursi Premium</h4>
+                        <p>Kursi cukur premium yang nyaman dengan fitur massage</p>
+                    </div>
+                    <div class="feature-card">
+                        <div style="height: 200px; background: linear-gradient(45deg, var(--gold), var(--gold-dark)); border-radius: 15px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; color: var(--primary-black); font-size: 4rem;">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h4>Alat Profesional</h4>
+                        <p>Peralatan cukur profesional dengan teknologi terbaru</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Testimoni -->
+        <section class="features">
+            <div class="container">
+                <h2 class="section-title">Testimoni Pelanggan</h2>
+                <p class="section-subtitle">Apa kata mereka tentang pengalaman di BarberEase</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div style="margin-bottom: 1rem; color: var(--gold); font-size: 1.5rem;">⭐⭐⭐⭐⭐</div>
+                        <p>"Pelayanan luar biasa! Barber-nya profesional dan hasil cukurannya selalu memuaskan. Booking online-nya juga sangat mudah."</p>
+                        <h4 style="margin-top: 1.5rem; color: var(--gold);">- Ahmad Rizki</h4>
+                        <small style="color: var(--gray-dark);">Regular Customer</small>
+                    </div>
+                    <div class="feature-card">
+                        <div style="margin-bottom: 1rem; color: var(--gold); font-size: 1.5rem;">⭐⭐⭐⭐⭐</div>
+                        <p>"Tempatnya bersih, modern, dan barber-nya ramah. Bisa pilih barber sesuai style yang diinginkan. Highly recommended!"</p>
+                        <h4 style="margin-top: 1.5rem; color: var(--gold);">- Budi Santoso</h4>
+                        <small style="color: var(--gray-dark);">Business Executive</small>
+                    </div>
+                    <div class="feature-card">
+                        <div style="margin-bottom: 1rem; color: var(--gold); font-size: 1.5rem;">⭐⭐⭐⭐⭐</div>
+                        <p>"Sudah langganan di sini hampir 2 tahun. Barber Dimas selalu tau style yang cocok buat saya. Top deh!"</p>
+                        <h4 style="margin-top: 1.5rem; color: var(--gold);">- Andi Wijaya</h4>
+                        <small style="color: var(--gray-dark);">Creative Director</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Services Page -->
+    <div id="services" class="page">
+        <section class="features">
+            <div class="container">
+                <h2 class="section-title">Layanan Kami</h2>
+                <p class="section-subtitle">Berbagai layanan premium untuk penampilan terbaik Anda</p>
+                
+                <div class="services-grid">
+                    <div class="service-card">
+                        <div class="service-image">
+                            <i class="fas fa-cut"></i>
+                        </div>
+                        <div class="service-content">
+                            <div class="service-price">Rp 35.000 - 75.000</div>
+                            <h3>Potong Rambut</h3>
+                            <p>Berbagai style potongan rambut modern mulai dari classic cut, fade, undercut, hingga style terbaru yang sedang trending</p>
+                            <ul style="margin: 1rem 0; color: var(--gray-dark);">
+                                <li>✓ Konsultasi style gratis</li>
+                                <li>✓ Cuci rambut included</li>
+                                <li>✓ Styling dengan pomade</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-image">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="service-content">
+                            <div class="service-price">Rp 25.000 - 50.000</div>
+                            <h3>Cukur Jenggot</h3>
+                            <p>Perawatan jenggot profesional dengan teknik tradisional dan modern untuk hasil yang presisi dan rapi</p>
+                            <ul style="margin: 1rem 0; color: var(--gray-dark);">
+                                <li>✓ Hot towel treatment</li>
+                                <li>✓ Precision trimming</li>
+                                <li>✓ Aftershave premium</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-image">
+                            <i class="fas fa-shower"></i>
+                        </div>
+                        <div class="service-content">
+                            <div class="service-price">Rp 15.000 - 30.000</div>
+                            <h3>Hair Spa / Hairwash</h3>
+                            <p>Perawatan rambut dengan shampo premium, scalp massage yang menyegarkan, dan kondisioner untuk rambut yang sehat</p>
+                            <ul style="margin: 1rem 0; color: var(--gray-dark);">
+                                <li>✓ Deep cleansing shampoo</li>
+                                <li>✓ Scalp massage therapy</li>
+                                <li>✓ Nourishing conditioner</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="service-card">
+                        <div class="service-image">
+                            <i class="fas fa-crown"></i>
+                        </div>
+                        <div class="service-content">
+                            <div class="service-price">Rp 85.000 - 150.000</div>
+                            <h3>Paket Ganteng Lengkap</h3>
+                            <p>Paket lengkap all-in-one untuk tampilan maksimal termasuk potong rambut, cukur jenggot, hair spa, dan styling</p>
+                            <ul style="margin: 1rem 0; color: var(--gray-dark);">
+                                <li>✓ Semua layanan included</li>
+                                <li>✓ Face mask treatment</li>
+                                <li>✓ Premium styling products</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Barbers Page -->
+    <div id="barbers" class="page">
+        <section class="features">
+            <div class="container">
+                <h2 class="section-title">Tim Barber Profesional</h2>
+                <p class="section-subtitle">Pilih barber terbaik sesuai dengan style dan preferensi Anda</p>
+                
+                <div class="barber-grid">
+                    <div class="barber-card">
+                        <div class="barber-image">
+                            <div class="barber-rating">⭐ 4.9</div>
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="barber-content">
+                            <div class="barber-name">Barber Dimas</div>
+                            <div class="barber-skills">Fade, Classic, Undercut, Pompadour</div>
+                            <div class="barber-experience">📅 4 tahun pengalaman | 👥 500+ pelanggan</div>
+                            <p style="margin-bottom: 1.5rem; color: var(--gray-dark);">Spesialis gaya classic dan modern cut. Ahli dalam teknik fade dan detail finishing yang presisi.</p>
+                            <button class="btn btn-primary" onclick="selectBarber('Dimas', 1)">
+                                <i class="fas fa-user-check"></i> Pilih Barber Ini
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="barber-card">
+                        <div class="barber-image">
+                            <div class="barber-rating">⭐ 4.8</div>
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="barber-content">
+                            <div class="barber-name">Barber Reza</div>
+                            <div class="barber-skills">Buzz Cut, Crew Cut, Military Style</div>
+                            <div class="barber-experience">📅 3 tahun pengalaman | 👥 350+ pelanggan</div>
+                            <p style="margin-bottom: 1.5rem; color: var(--gray-dark);">Ahli dalam potongan pendek dan style maskulin. Teknik cukur yang cepat namun tetap rapi dan presisi.</p>
+                            <button class="btn btn-primary" onclick="selectBarber('Reza', 2)">
+                                <i class="fas fa-user-check"></i> Pilih Barber Ini
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="barber-card">
+                        <div class="barber-image">
+                            <div class="barber-rating">⭐ 4.9</div>
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="barber-content">
+                            <div class="barber-name">Barber Andi</div>
+                            <div class="barber-skills">Trendy Cut, Hair Styling, Color</div>
+                            <div class="barber-experience">📅 5 tahun pengalaman | 👥 700+ pelanggan</div>
+                            <p style="margin-bottom: 1.5rem; color: var(--gray-dark);">Spesialis style trendy dan modern. Berpengalaman dalam hair coloring dan creative styling.</p>
+                            <button class="btn btn-primary" onclick="selectBarber('Andi', 3)">
+                                <i class="fas fa-user-check"></i> Pilih Barber Ini
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="barber-card">
+                        <div class="barber-image">
+                            <div class="barber-rating">⭐ 4.7</div>
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="barber-content">
+                            <div class="barber-name">Barber Rico</div>
+                            <div class="barber-skills">Beard Styling, Mustache, Grooming</div>
+                            <div class="barber-experience">📅 6 tahun pengalaman | 👥 800+ pelanggan</div>
+                            <p style="margin-bottom: 1.5rem; color: var(--gray-dark);">Master dalam perawatan jenggot dan kumis. Teknik traditional shaving dengan hasil yang sempurna.</p>
+                            <button class="btn btn-primary" onclick="selectBarber('Rico', 4)">
+                                <i class="fas fa-user-check"></i> Pilih Barber Ini
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Gallery Page -->
+    <div id="gallery" class="page">
+        <section class="features">
+            <div class="container">
+                <h2 class="section-title">Galeri & Portofolio</h2>
+                <p class="section-subtitle">Lihat hasil karya barber kami dan suasana barbershop</p>
+                
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div style="height: 250px; background: linear-gradient(45deg, var(--primary-black), #333); border-radius: 15px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 4rem;">
+                            <i class="fas fa-images"></i>
+                        </div>
+                        <h4>Before & After</h4>
+                        <p>Transformasi pelanggan dengan berbagai style potongan</p>
+                    </div>
+                    <div class="feature-card">
+                        <div style="height: 250px; background: linear-gradient(45deg, var(--primary-black), #333); border-radius: 15px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 4rem;">
+                            <i class="fas fa-camera"></i>
+                        </div>
+                        <h4>Interior Design</h4>
+                        <p>Suasana barbershop yang nyaman dan modern</p>
+                    </div>
+                    <div class="feature-card">
+                        <div style="height: 250px; background: linear-gradient(45deg, var(--primary-black), #333); border-radius: 15px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 4rem;">
+                            <i class="fas fa-tools"></i>
+                        </div>
+                        <h4>Professional Tools</h4>
+                        <p>Peralatan profesional yang kami gunakan</p>
+                    </div>
+                    <div class="feature-card">
+                        <div style="height: 250px; background: linear-gradient(45deg, var(--primary-black), #333); border-radius: 15px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 4rem;">
+                            <i class="fas fa-certificate"></i>
+                        </div>
+                        <h4>Achievements</h4>
+                        <p>Penghargaan dan sertifikasi yang kami raih</p>
+                    </div>
+                    <div class="feature-card">
+                        <div style="height: 250px; background: linear-gradient(45deg, var(--primary-black), #333); border-radius: 15px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 4rem;">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h4>Happy Customers</h4>
+                        <p>Momen bahagia pelanggan setelah treatment</p>
+                    </div>
+                    <div class="feature-card">
+                        <div style="height: 250px; background: linear-gradient(45deg, var(--primary-black), #333); border-radius: 15px; margin-bottom: 1rem; display: flex; align-items: center; justify-content: center; color: var(--gold); font-size: 4rem;">
+                            <i class="fas fa-video"></i>
+                        </div>
+                        <h4>Process Videos</h4>
+                        <p>Video proses cutting dan styling</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Booking Page -->
+    <div id="booking" class="page">
+        <section class="features">
+            <div class="container">
+                <div class="booking-container">
+                    <div class="booking-header">
+                        <h2><i class="fas fa-calendar-check"></i> Booking Appointment</h2>
+                        <p>Isi form di bawah untuk membuat appointment</p>
+                    </div>
+                    
+                    <form class="booking-form" onsubmit="processBooking(event)">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="customer-name">Nama Lengkap *</label>
+                                <input type="text" id="customer-name" required placeholder="Masukkan nama lengkap">
+                            </div>
+                            <div class="form-group">
+                                <label for="customer-phone">Nomor WhatsApp *</label>
+                                <input type="tel" id="customer-phone" required placeholder="08xxxxxxxxxx">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="customer-email">Email (Opsional)</label>
+                            <input type="email" id="customer-email" placeholder="email@example.com">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="booking-date">Pilih Tanggal *</label>
+                                <input type="date" id="booking-date" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="booking-time">Pilih Jam *</label>
+                                <select id="booking-time" required>
+                                    <option value="">Pilih Jam</option>
+                                    <option value="08:00">08:00 - 09:00</option>
+                                    <option value="09:00">09:00 - 10:00</option>
+                                    <option value="10:00">10:00 - 11:00</option>
+                                    <option value="11:00">11:00 - 12:00</option>
+                                    <option value="12:00">12:00 - 13:00</option>
+                                    <option value="13:00">13:00 - 14:00</option>
+                                    <option value="14:00">14:00 - 15:00</option>
+                                    <option value="15:00">15:00 - 16:00</option>
+                                    <option value="16:00">16:00 - 17:00</option>
+                                    <option value="17:00">17:00 - 18:00</option>
+                                    <option value="18:00">18:00 - 19:00</option>
+                                    <option value="19:00">19:00 - 20:00</option>
+                                    <option value="20:00">20:00 - 21:00</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="barber-select">Pilih Barber *</label>
+                                <select id="barber-select" required>
+                                    <option value="">Pilih Barber</option>
+                                    <option value="Dimas">Barber Dimas - Fade, Classic, Undercut</option>
+                                    <option value="Reza">Barber Reza - Buzz Cut, Crew Cut</option>
+                                    <option value="Andi">Barber Andi - Trendy Cut, Styling</option>
+                                    <option value="Rico">Barber Rico - Beard, Grooming</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="service-select">Pilih Layanan *</label>
+                                <select id="service-select" required onchange="calculateTotal()">
+                                    <option value="">Pilih Layanan</option>
+                                    <option value="potong-35000">Potong Rambut Basic - Rp 35.000</option>
+                                    <option value="potong-75000">Potong Rambut Premium - Rp 75.000</option>
+                                    <option value="jenggot-25000">Cukur Jenggot Basic - Rp 25.000</option>
+                                    <option value="jenggot-50000">Cukur Jenggot Premium - Rp 50.000</option>
+                                    <option value="hairspa-15000">Hair Spa Basic - Rp 15.000</option>
+                                    <option value="hairspa-30000">Hair Spa Premium - Rp 30.000</option>
+                                    <option value="paket-85000">Paket Ganteng Basic - Rp 85.000</option>
+                                    <option value="paket-150000">Paket Ganteng Premium - Rp 150.000</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="notes">Catatan Tambahan (Opsional)</label>
+                            <textarea id="notes" rows="3" placeholder="Tuliskan request khusus atau style yang diinginkan..."></textarea>
+                        </div>
+                        
+                        <div class="booking-summary">
+                            <h3 style="color: var(--gold); margin-bottom: 1rem;">📋 Ringkasan Booking</h3>
+                            <div class="summary-row">
+                                <span>Layanan:</span>
+                                <span id="summary-service">-</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Barber:</span>
+                                <span id="summary-barber">-</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Tanggal:</span>
+                                <span id="summary-date">-</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Jam:</span>
+                                <span id="summary-time">-</span>
+                            </div>
+                            <div class="summary-row">
+                                <span>Estimasi Durasi:</span>
+                                <span>45 - 60 Menit</span>
+                            </div>
+                            <div class="summary-row summary-total">
+                                <span>Total Biaya:</span>
+                                <span id="summary-total">Rp 0</span>
+                            </div>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem; padding: 1rem;">
+                            <i class="fas fa-credit-card"></i> Lanjut ke Pembayaran
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Payment Page -->
+    <div id="payment" class="page">
+        <section class="features">
+            <div class="container payment-container">
+                <h2 class="section-title">Pembayaran</h2>
+                
+                <div class="countdown">
+                    <i class="fas fa-hourglass-half"></i> Selesaikan pembayaran dalam: <span id="countdown-timer">29:59</span>
+                </div>
+                
+                <div class="payment-methods">
+                    <div class="payment-method">
+                        <h3 style="color: var(--gold); margin-bottom: 1rem;">💳 Transfer Bank</h3>
+                        <div style="background: var(--gray-light); padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
+                            <p><strong>Bank:</strong> BCA</p>
+                            <p><strong>No. Rekening:</strong> 1234567890</p>
+                            <p><strong>Atas Nama:</strong> BarberEase Indonesia</p>
+                            <p><strong>Nominal:</strong> <span id="payment-amount">Rp 0</span></p>
+                        </div>
+                        <p style="color: var(--gray-dark); font-size: 0.9rem;">
+                            <i class="fas fa-info-circle"></i> Transfer sesuai nominal yang tertera. Bukti transfer akan diverifikasi otomatis.
+                        </p>
+                    </div>
+                    
+                    <div class="payment-method">
+                        <h3 style="color: var(--gold); margin-bottom: 1rem;">📱 QRIS Payment</h3>
+                        <div class="qr-code">
+                            <div class="qr-placeholder">
+                                <i class="fas fa-qrcode"></i>
+                            </div>
+                            <p style="margin-top: 1rem; color: var(--gray-dark);">
+                                Scan QR Code dengan aplikasi pembayaran digital favorit Anda
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="payment-method">
+                        <h3 style="color: var(--gold); margin-bottom: 1rem;">💰 Bayar di Tempat</h3>
+                        <div style="background: var(--gray-light); padding: 1.5rem; border-radius: 10px; margin: 1rem 0;">
+                            <p><strong>Alamat:</strong> Jl. Barbershop Premium No. 88, Jakarta Selatan</p>
+                            <p><strong>Jam Operasional:</strong> 08:00 - 21:00 WIB</p>
+                            <p><strong>Metode Pembayaran:</strong> Cash, Debit, Credit Card</p>
+                        </div>
+                        <p style="color: var(--gray-dark); font-size: 0.9rem;">
+                            <i class="fas fa-info-circle"></i> Datang tepat waktu sesuai appointment. Pembayaran dilakukan setelah service.
+                        </p>
+                    </div>
+                    
+                    <div class="form-group" style="margin-top: 2rem;">
+                        <label for="payment-proof">Upload Bukti Pembayaran (Opsional)</label>
+                        <input type="file" id="payment-proof" accept="image/*" style="margin-top: 0.5rem;">
+                        <small style="color: var(--gray-dark);">Format: JPG, PNG, PDF (Max 5MB)</small>
+                    </div>
+                    
+                    <button class="btn btn-primary" style="width: 100%; margin-top: 2rem; padding: 1rem;" onclick="confirmPayment()">
+                        <i class="fas fa-check-circle"></i> Konfirmasi Pembayaran
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- History Page -->
+    <div id="history" class="page">
+        <section class="features">
+            <div class="container history-container">
+                <h2 class="section-title">Riwayat Booking</h2>
+                <p class="section-subtitle">Kelola dan lihat riwayat appointment Anda</p>
+                
+                <div class="history-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Tanggal</th>
+                                <th>Jam</th>
+                                <th>Barber</th>
+                                <th>Layanan</th>
+                                <th>Status</th>
+                                <th>Total</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>05/08/2025</td>
+                                <td>14:00 – 15:00</td>
+                                <td>Dimas</td>
+                                <td>Potong Rambut Premium</td>
+                                <td><span class="status-badge status-paid">Selesai</span></td>
+                                <td>Rp 75.000</td>
+                                <td>
+                                    <button class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.8rem; margin-right: 0.5rem;">
+                                        <i class="fas fa-eye"></i> Detail
+                                    </button>
+                                    <button class="btn btn-primary" style="padding: 0.4rem 1rem; font-size: 0.8rem;">
+                                        <i class="fas fa-star"></i> Review
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>07/08/2025</td>
+                                <td>16:00 – 17:00</td>
+                                <td>Reza</td>
+                                <td>Paket Ganteng Basic</td>
+                                <td><span class="status-badge status-pending">Pending</span></td>
+                                <td>Rp 85.000</td>
+                                <td>
+                                    <button class="btn btn-primary" style="padding: 0.4rem 1rem; font-size: 0.8rem; margin-right: 0.5rem;">
+                                        <i class="fas fa-upload"></i> Upload Bukti
+                                    </button>
+                                    <button class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.8rem;">
+                                        <i class="fas fa-times"></i> Batal
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>10/08/2025</td>
+                                <td>18:00 – 19:00</td>
+                                <td>Andi</td>
+                                <td>Trendy Cut + Hair Spa</td>
+                                <td><span class="status-badge status-paid">Dikonfirmasi</span></td>
+                                <td>Rp 105.000</td>
+                                <td>
+                                    <button class="btn btn-outline" style="padding: 0.4rem 1rem; font-size: 0.8rem; margin-right: 0.5rem;">
+                                        <i class="fas fa-calendar"></i> Reschedule
+                                    </button>
+                                    <button class="btn btn-primary" style="padding: 0.4rem 1rem; font-size: 0.8rem;">
+                                        <i class="fas fa-route"></i> Directions
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                
+                <div style="text-align: center; margin-top: 2rem;">
+                    <button class="btn btn-primary" onclick="showPage('booking')">
+                        <i class="fas fa-plus"></i> Buat Booking Baru
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Auth Page -->
+    <div id="auth" class="page">
+        <section class="features">
+            <div class="container">
+                <div class="auth-container">
+                    <div class="auth-header">
+                        <h2><i class="fas fa-user"></i> Akun BarberEase</h2>
+                        <p>Kelola booking dan dapatkan benefits eksklusif</p>
+                    </div>
+                    
+                    <div class="auth-tabs">
+                        <button class="auth-tab active" onclick="switchAuthTab('login')">Login</button>
+                        <button class="auth-tab" onclick="switchAuthTab('register')">Register</button>
+                    </div>
+                    
+                    <div id="login-form" class="auth-form">
+                        <form onsubmit="handleLogin(event)">
+                            <div class="form-group">
+                                <label for="login-email">Email / No HP</label>
+                                <input type="text" id="login-email" required placeholder="email@example.com atau 08xxxxxxxxxx">
+                            </div>
+                            <div class="form-group">
+                                <label for="login-password">Password</label>
+                                <input type="password" id="login-password" required placeholder="Masukkan password">
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </button>
+                            <p style="text-align: center; margin-top: 1rem; color: var(--gray-dark);">
+                                Lupa password? <a href="#" style="color: var(--gold);">Reset di sini</a>
+                            </p>
+                        </form>
+                    </div>
+                    
+                    <div id="register-form" class="auth-form hidden">
+                        <form onsubmit="handleRegister(event)">
+                            <div class="form-group">
+                                <label for="register-name">Nama Lengkap</label>
+                                <input type="text" id="register-name" required placeholder="Nama lengkap">
+                            </div>
+                            <div class="form-group">
+                                <label for="register-phone">No WhatsApp</label>
+                                <input type="tel" id="register-phone" required placeholder="08xxxxxxxxxx">
+                            </div>
+                            <div class="form-group">
+                                <label for="register-email">Email</label>
+                                <input type="email" id="register-email" required placeholder="email@example.com">
+                            </div>
+                            <div class="form-group">
+                                <label for="register-password">Password</label>
+                                <input type="password" id="register-password" required placeholder="Minimal 6 karakter">
+                            </div>
+                            <div class="form-group">
+                                <label for="register-confirm">Konfirmasi Password</label>
+                                <input type="password" id="register-confirm" required placeholder="Ulangi password">
+                            </div>
+                            <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                                <i class="fas fa-user-plus"></i> Daftar Sekarang
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Admin Page -->
+    <div id="admin" class="page">
+        <section class="features">
+            <div class="container">
+                <h2 class="section-title">Admin Dashboard</h2>
+                <p class="section-subtitle">Kelola barbershop dan pantau performa bisnis</p>
+                
+                <div class="admin-stats">
+                    <div class="stat-card">
+                        <h3>47</h3>
+                        <p><i class="fas fa-calendar-check"></i> Booking Hari Ini</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>328</h3>
+                        <p><i class="fas fa-chart-line"></i> Total Booking Bulan Ini</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>Rp 15.2M</h3>
+                        <p><i class="fas fa-money-bill-wave"></i> Revenue Bulan Ini</p>
+                    </div>
+                    <div class="stat-card">
+                        <h3>4.8</h3>
+                        <p><i class="fas fa-star"></i> Rating Rata-rata</p>
+                    </div>
+                </div>
+                
+                <div class="admin-actions">
+                    <div class="action-card">
+                        <i class="fas fa-calendar-alt"></i>
+                        <h3>Manajemen Jadwal</h3>
+                        <p>Kelola jadwal barber dan ketersediaan slot booking</p>
+                        <button class="btn btn-primary" style="margin-top: 1rem;">
+                            Kelola Jadwal
+                        </button>
+                    </div>
+                    
+                    <div class="action-card">
+                        <i class="fas fa-users"></i>
+                        <h3>Manajemen Barber</h3>
+                        <p>Tambah, edit, atau nonaktifkan barber dan update profil</p>
+                        <button class="btn btn-primary" style="margin-top: 1rem;">
+                            Kelola Barber
+                        </button>
+                    </div>
+                    
+                    <div class="action-card">
+                        <i class="fas fa-cut"></i>
+                        <h3>Manajemen Layanan</h3>
+                        <p>Update harga layanan dan tambah paket baru</p>
+                        <button class="btn btn-primary" style="margin-top: 1rem;">
+                            Kelola Layanan
+                        </button>
+                    </div>
+                    
+                    <div class="action-card">
+                        <i class="fas fa-credit-card"></i>
+                        <h3>Konfirmasi Pembayaran</h3>
+                        <p>Verifikasi pembayaran customer dan update status</p>
+                        <button class="btn btn-primary" style="margin-top: 1rem;">
+                            Kelola Pembayaran
+                        </button>
+                    </div>
+                    
+                    <div class="action-card">
+                        <i class="fas fa-chart-bar"></i>
+                        <h3>Laporan Transaksi</h3>
+                        <p>Lihat laporan harian, mingguan, dan bulanan</p>
+                        <button class="btn btn-primary" style="margin-top: 1rem;">
+                            Lihat Laporan
+                        </button>
+                    </div>
+                    
+                    <div class="action-card">
+                        <i class="fas fa-cog"></i>
+                        <h3>Pengaturan Sistem</h3>
+                        <p>Konfigurasi aplikasi dan pengaturan umum</p>
+                        <button class="btn btn-primary" style="margin-top: 1rem;">
+                            Pengaturan
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-cut"></i> BarberEase</h3>
+                    <p>Barbershop modern dengan teknologi booking terdepan. Wujudkan penampilan terbaik Anda bersama barber profesional kami.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-tiktok"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Kontak Info</h3>
+                    <a href="#"><i class="fas fa-map-marker-alt"></i> Jl. Barbershop Premium No. 88, Jakarta Selatan 12345</a>
+                    <a href="#"><i class="fas fa-phone"></i> +62 812-3456-7890</a>
+                    <a href="#"><i class="fas fa-envelope"></i> info@barberease.com</a>
+                    <a href="#"><i class="fab fa-whatsapp"></i> WhatsApp: +62 812-3456-7890</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Jam Operasional</h3>
+                    <a href="#"><i class="fas fa-clock"></i> Senin - Jumat: 08:00 - 21:00</a>
+                    <a href="#"><i class="fas fa-clock"></i> Sabtu: 08:00 - 22:00</a>
+                    <a href="#"><i class="fas fa-clock"></i> Minggu: 09:00 - 20:00</a>
+                    <a href="#"><i class="fas fa-info-circle"></i> Buka setiap hari</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <a href="#" onclick="showPage('home')">Beranda</a>
+                    <a href="#" onclick="showPage('services')">Layanan & Harga</a>
+                    <a href="#" onclick="showPage('barbers')">Tim Barber</a>
+                    <a href="#" onclick="showPage('booking')">Booking Online</a>
+                    <a href="#" onclick="showPage('gallery')">Galeri</a>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 BarberEase. All rights reserved. | Designed with ❤️ for modern gentlemen</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Global variables
+        let currentUser = null;
+        let bookings = [];
+        let currentBooking = {};
+        let countdownInterval = null;
+
+        // Set default date to today
+        document.addEventListener('DOMContentLoaded', function() {
+            const today = new Date().toISOString().split('T')[0];
+            const bookingDate = document.getElementById('booking-date');
+            if (bookingDate) bookingDate.value = today;
+            
+            // Add change listeners for booking form
+            const formElements = ['booking-date', 'booking-time', 'barber-select', 'service-select'];
+            formElements.forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('change', updateBookingSummary);
+                }
+            });
+        });
+
+        // Navigation functions
+        function showPage(pageId) {
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                window.scrollTo(0, 0);
+            }
+        }
+
+        // Barber selection
+        function selectBarber(barberName, barberId) {
+            const barberSelect = document.getElementById('barber-select');
+            if (barberSelect) {
+                barberSelect.value = barberName;
+                updateBookingSummary();
+            }
+            showPage('booking');
+        }
+
+        // Auth functions
+        function switchAuthTab(tab) {
+            const loginForm = document.getElementById('login-form');
+            const registerForm = document.getElementById('register-form');
+            const tabs = document.querySelectorAll('.auth-tab');
+            
+            tabs.forEach(t => t.classList.remove('active'));
+            
+            if (tab === 'login') {
+                loginForm.classList.remove('hidden');
+                registerForm.classList.add('hidden');
+                tabs[0].classList.add('active');
+            } else {
+                loginForm.classList.add('hidden');
+                registerForm.classList.remove('hidden');
+                tabs[1].classList.add('active');
+            }
+        }
+
+        function handleLogin(event) {
+            event.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (email && password) {
+                currentUser = { email: email, name: 'Customer' };
+                showAlert('Login berhasil! Selamat datang di BarberEase', 'success');
+                showPage('home');
+                updateAuthButtons();
+            } else {
+                showAlert('Email/password tidak valid!', 'danger');
+            }
+        }
+
+        function handleRegister(event) {
+            event.preventDefault();
+            const name = document.getElementById('register-name').value;
+            const phone = document.getElementById('register-phone').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirm = document.getElementById('register-confirm').value;
+            
+            if (password !== confirm) {
+                showAlert('Password tidak cocok!', 'danger');
+                return;
+            }
+            
+            if (name && phone && email && password) {
+                currentUser = { email: email, name: name, phone: phone };
+                showAlert('Registrasi berhasil! Selamat datang di BarberEase', 'success');
+                showPage('home');
+                updateAuthButtons();
+            } else {
+                showAlert('Harap isi semua field dengan benar!', 'danger');
+            }
+        }
+
+        function updateAuthButtons() {
+            const authButtons = document.querySelector('.auth-buttons');
+            if (currentUser && authButtons) {
+                authButtons.innerHTML = `
+                    <span style="color: var(--gold); margin-right: 1rem;">👋 Hi, ${currentUser.name}</span>
+                    <a href="#" class="btn btn-outline" onclick="logout()">Logout</a>
+                `;
+            }
+        }
+
+        function logout() {
+            currentUser = null;
+            showAlert('Logout berhasil!', 'success');
+            location.reload();
+        }
+
+        // Booking functions
+        function updateBookingSummary() {
+            const serviceSelect = document.getElementById('service-select');
+            const barberSelect = document.getElementById('barber-select');
+            const dateInput = document.getElementById('booking-date');
+            const timeInput = document.getElementById('booking-time');
+            
+            const summaryService = document.getElementById('summary-service');
+            const summaryBarber = document.getElementById('summary-barber');
+            const summaryDate = document.getElementById('summary-date');
+            const summaryTime = document.getElementById('summary-time');
+            const summaryTotal = document.getElementById('summary-total');
+            
+            if (summaryService && serviceSelect.value) {
+                const serviceText = serviceSelect.options[serviceSelect.selectedIndex].text;
+                summaryService.textContent = serviceText.split(' - ')[0];
+            }
+            
+            if (summaryBarber && barberSelect.value) {
+                summaryBarber.textContent = barberSelect.value;
+            }
+            
+            if (summaryDate && dateInput.value) {
+                const date = new Date(dateInput.value);
+                summaryDate.textContent = date.toLocaleDateString('id-ID');
+            }
+            
+            if (summaryTime && timeInput.value) {
+                summaryTime.textContent = timeInput.value + ' - ' + getEndTime(timeInput.value);
+            }
+            
+            calculateTotal();
+        }
+
+        function getEndTime(startTime) {
+            const [hours, minutes] = startTime.split(':').map(Number);
+            const endHour = hours + 1;
+            return `${endHour.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+        }
+
+        function calculateTotal() {
+            const serviceSelect = document.getElementById('service-select');
+            const summaryTotal = document.getElementById('summary-total');
+            
+            if (serviceSelect && serviceSelect.value && summaryTotal) {
+                const serviceValue = serviceSelect.value;
+                const price = serviceValue.split('-')[1];
+                if (price) {
+                    summaryTotal.textContent = `Rp ${parseInt(price).toLocaleString('id-ID')}`;
+                    currentBooking.total = parseInt(price);
+                }
+            }
+        }
+
+        function processBooking(event) {
+            event.preventDefault();
+            
+            if (!currentUser) {
+                showAlert('Silakan login terlebih dahulu untuk melakukan booking!', 'warning');
+                showPage('auth');
+                return;
+            }
+            
+            // Collect form data
+            const serviceSelect = document.getElementById('service-select');
+            currentBooking = {
+                name: document.getElementById('customer-name').value,
+                phone: document.getElementById('customer-phone').value,
+                email: document.getElementById('customer-email').value,
+                date: document.getElementById('booking-date').value,
+                time: document.getElementById('booking-time').value,
+                barber: document.getElementById('barber-select').value,
+                service: serviceSelect.options[serviceSelect.selectedIndex].text,
+                notes: document.getElementById('notes').value,
+                total: currentBooking.total || 0
+            };
+            
+            // Validation
+            if (!currentBooking.name || !currentBooking.phone || !currentBooking.date || 
+                !currentBooking.time || !currentBooking.barber || !currentBooking.service) {
+                showAlert('Harap isi semua field yang wajib diisi!', 'danger');
+                return;
+            }
+            
+            showPage('payment');
+            setupPayment();
+        }
+
+        function setupPayment() {
+            const paymentAmount = document.getElementById('payment-amount');
+            if (paymentAmount && currentBooking.total) {
+                paymentAmount.textContent = `Rp ${currentBooking.total.toLocaleString('id-ID')}`;
+            }
+            
+            startCountdown();
+        }
+
+        function startCountdown() {
+            let timeLeft = 30 * 60; // 30 minutes
+            const timerElement = document.getElementById('countdown-timer');
+            
+            countdownInterval = setInterval(() => {
+                const minutes = Math.floor(timeLeft / 60);
+                const seconds = timeLeft % 60;
+                
+                if (timerElement) {
+                    timerElement.textContent = 
+                        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }
+                
+                if (timeLeft <= 0) {
+                    clearInterval(countdownInterval);
+                    showAlert('Waktu pembayaran habis! Silakan booking ulang.', 'danger');
+                    showPage('booking');
+                }
+                
+                timeLeft--;
+            }, 1000);
+        }
+
+        function confirmPayment() {
+            if (countdownInterval) clearInterval(countdownInterval);
+            
+            // Add booking to history
+            bookings.push({
+                ...currentBooking,
+                status: 'confirmed',
+                id: Date.now()
+            });
+            
+            showAlert('🎉 Pembayaran berhasil dikonfirmasi! Appointment Anda telah terjadwal. Terima kasih telah memilih BarberEase!', 'success');
+            showPage('history');
+            
+            // Send WhatsApp notification (simulation)
+            setTimeout(() => {
+                showAlert('📱 Notifikasi WhatsApp telah dikirim dengan detail appointment', 'success');
+            }, 2000);
+        }
+
+        // Utility functions
+        function showAlert(message, type) {
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type}`;
+            alertDiv.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'danger' ? 'exclamation-triangle' : 'info-circle'}"></i> ${message}`;
+            
+            const currentPage = document.querySelector('.page.active .container');
+            if (currentPage) {
+                currentPage.insertBefore(alertDiv, currentPage.firstChild);
+                
+                setTimeout(() => {
+                    if (alertDiv.parentNode) {
+                        alertDiv.parentNode.removeChild(alertDiv);
+                    }
+                }, 5000);
+            }
+        }
+
+        // Mobile menu toggle
+        document.querySelector('.mobile-menu-btn')?.addEventListener('click', function() {
+            const navLinks = document.querySelector('.nav-links');
+            if (navLinks) {
+                navLinks.style.display = navLinks.style.display === 'flex' ? 'none' : 'flex';
+                navLinks.style.flexDirection = 'column';
+                navLinks.style.position = 'absolute';
+                navLinks.style.top = '100%';
+                navLinks.style.left = '0';
+                navLinks.style.right = '0';
+                navLinks.style.background = 'var(--primary-black)';
+                navLinks.style.padding = '1rem';
+            }
+        });
+
+        // Smooth scroll for links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
